@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Todo List</title>
+</head>
+<body class="bg-gray-100 flex justify-center py-10">
+  
+  <div class="bg-white p-6 border border-black rounded shadow-md w-full max-w-xl">
+    <h2 class="text-2xl font-semibold text-center mb-6">Your Todo List</h2>
+    
+    <!-- Debug info (remove after fixing) -->
+    <p class="text-sm text-gray-600 mb-4">
+      User: {{ request.user.username }} | Todo count: {{ todos.count }}
+    </p>
+    
+    <ul class="space-y-3">
+      {% for todo in todos %}
+        <li class="flex justify-between items-center border-b pb-2">
+          <div>
+            <span class="text-gray-800 font-medium">{{ todo.title }}</span>
+            {% if todo.description %}
+              <p class="text-sm text-gray-600">{{ todo.description }}</p>
+            {% endif %}
+          </div>
+          <div class="space-x-2">
+            <a href="{% url 'todo_update' todo.pk %}" class="text-blue-600 hover:underline">Edit</a>
+            <a href="{% url 'todo_delete' todo.pk %}" class="text-red-600 hover:underline">Delete</a>
+          </div>
+        </li>
+      {% empty %}
+        <li class="text-gray-500 text-center">No Todos Found</li>
+      {% endfor %}
+    </ul>
+    
+    <!-- Buttons section -->
+    <div class="mt-6 flex justify-center items-center gap-4">
+      <a href="{% url 'todo_create' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+        + Add New Todo
+      </a>
+      
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="text-red-600 hover:underline">
+          Logout
+        </button>
+      </form>
+    </div>
+    
+  </div>
+  
+</body>
+</html>
